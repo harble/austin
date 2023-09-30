@@ -4,6 +4,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
 import com.java3y.austin.common.dto.account.sms.TencentSmsAccount;
@@ -38,6 +39,7 @@ import java.util.Objects;
 @Component("TencentSmsScript")
 public class TencentSmsScript implements SmsScript {
 
+    private static final String PARAMS_SPLIT_KEY = "{|}";
     private static final Integer PHONE_NUM = 11;
 
     @Autowired
@@ -122,7 +124,12 @@ public class TencentSmsScript implements SmsScript {
         req.setSmsSdkAppId(account.getSmsSdkAppId());
         req.setSignName(account.getSignName());
         req.setTemplateId(account.getTemplateId());
-        String[] templateParamSet1 = {smsParam.getContent()};
+
+        //String[] templateParamSet1 = {smsParam.getContent()};
+        List<String> listPS = StrUtil.splitTrim(smsParam.getContent(), PARAMS_SPLIT_KEY);
+        String[] templateParamSet1 = new String[listPS.size()];
+        listPS.toArray(templateParamSet1);
+
         req.setTemplateParamSet(templateParamSet1);
         req.setSessionContext(IdUtil.fastSimpleUUID());
         return req;
