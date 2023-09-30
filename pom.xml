@@ -41,6 +41,9 @@
         <weixin-java>4.5.3.B</weixin-java>
     </properties>
 
+    <repositories><repository><id>spring</id><url>https://maven.aliyun.com/repository/spring</url></repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <!--mysql驱动包-->
