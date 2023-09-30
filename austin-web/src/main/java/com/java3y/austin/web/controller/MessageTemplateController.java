@@ -99,7 +99,12 @@ public class MessageTemplateController {
     @GetMapping("query/{id}")
     @ApiOperation("/根据Id查找")
     public Map<String, Object> queryById(@PathVariable("id") Long id) {
-        return Convert4Amis.flatSingleMap(messageTemplateService.queryById(id));
+        Map<String, Object> retMap = Convert4Amis.flatSingleMap(messageTemplateService.queryById(id));
+
+        if ( retMap!=null && !retMap.containsKey("content") && retMap.containsKey("msgContent")) {
+            retMap.put("content", retMap.get("msgContent").toString().replaceAll("\"","\\\\\""));
+        }
+        return retMap;
     }
 
     /**
@@ -193,7 +198,8 @@ public class MessageTemplateController {
     @PostMapping("upload")
     @ApiOperation("/上传人群文件")
     public HashMap<Object, Object> upload(@RequestParam("file") MultipartFile file) {
-        String filePath = dataPath + IdUtil.fastSimpleUUID() + file.getOriginalFilename();
+        //String filePath = dataPath + IdUtil.fastSimpleUUID() + file.getOriginalFilename();
+        String filePath = new File(dataPath).getAbsolutePath() + "/" + IdUtil.fastSimpleUUID() + file.getOriginalFilename();
         try {
             File localFile = new File(filePath);
             if (!localFile.exists()) {
@@ -201,7 +207,8 @@ public class MessageTemplateController {
             }
             file.transferTo(localFile);
         } catch (Exception e) {
-            log.error("MessageTemplateController#upload fail! e:{},params{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(file));
+            //log.error("MessageTemplateController#upload fail! e:{},params{}", Throwables.getStackTraceAsString(e), JSON.toJSONString(file));
+            log.error("MessageTemplateController#upload fail! e:{},params{}", Throwables.getStackTraceAsString(e), filePath);
             throw new CommonException(RespStatusEnum.SERVICE_ERROR);
         }
         return MapUtil.of(new String[][]{{"value", filePath}});
