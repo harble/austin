@@ -50,6 +50,10 @@ public enum IdType implements PowerfulEnum {
      * 飞书userId
      */
     FEI_SHU_USER_ID(90, "fei_shu_user_id"),
+    /**
+     * URL
+     */
+    URL(100, "url"),
     ;
 
     private final Integer code;

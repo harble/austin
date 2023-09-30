@@ -71,6 +71,10 @@ public enum ChannelType implements PowerfulEnum {
      * alipayMiniProgram(支付宝小程序)
      */
     ALIPAY_MINI_PROGRAM(120, "alipayMiniProgram(支付宝小程序)", AlipayMiniProgramContentModel.class, "alipay_mini_program", null, null),
+    /**
+     * url(网络链接)
+     */
+    URL(130, "url(网络链接)", UrlContentModel.class, "url", null, null),
     ;
 
     /**
