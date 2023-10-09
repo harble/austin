@@ -18,16 +18,16 @@ public class UrlContentModel extends ContentModel {
     /**
      * options
      */
-    Map<String, String> options;
+    Map<String, String> Options;
 
     /**
      * headers
      */
-    Map<String, String> headers;
+    Map<String, String> Headers;
 
     /**
      * parameters
      */
-    Map<String, String> params;
+    Map<String, String> Params;
 
 }

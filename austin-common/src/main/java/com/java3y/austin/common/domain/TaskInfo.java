@@ -87,4 +87,8 @@ public class TaskInfo implements Serializable, ProcessModel {
     private Integer sendAccount;
 
 
+    /**
+     * 重试次数..）
+     */
+    private Integer retryCount;
 }

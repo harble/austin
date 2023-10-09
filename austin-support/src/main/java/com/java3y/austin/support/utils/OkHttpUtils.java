@@ -4,10 +4,13 @@ import cn.hutool.core.map.MapUtil;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.apache.http.client.utils.URIBuilder;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -185,5 +188,47 @@ public class OkHttpUtils {
         return "";
     }
 
+    public static String jsonToQueryString(JSONObject jsonObject) {
+        try {
+            if ( jsonObject==null || jsonObject.length()==0 ) return null;
+
+            // String jsonStr = "{\"name\": \"John\", \"age\": 30, \"city\": \"New York\"}";
+            // // 将JSON字符串解析为JSON对象
+            // JSONObject jsonObject = new JSONObject(jsonStr);
+
+            // 创建一个URIBuilder对象
+            URIBuilder uriBuilder = new URIBuilder();
+
+            Iterator keys = jsonObject.keys();
+            while ( keys.hasNext() ) {
+                String key = keys.next().toString();
+                uriBuilder.addParameter(key, jsonObject.get(key).toString());
+                // System.out.println(key + ":" + jsonObject.get(key));
+            }
+
+            // 获取构建好的query string
+            return uriBuilder.build().getQuery();
+        }
+        catch (Exception e) {
+        }
+
+        return null;
+    }
+
+    public static String mapToQueryString(Map<String, String> mapObject) {
+        try {
+            if ( mapObject==null || mapObject.isEmpty() ) return null;
+
+            URIBuilder uriBuilder = new URIBuilder();
+            for ( String key : mapObject.keySet() ) {
+                uriBuilder.addParameter(key, mapObject.get(key));
+            }
+            return uriBuilder.build().getQuery();
+        }
+        catch (Exception e) {
+        }
+
+        return null;
+    }
 }
 
