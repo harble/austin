@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
 import com.java3y.austin.common.domain.AnchorInfo;
 import com.java3y.austin.common.domain.LogParam;
+import com.java3y.austin.common.enums.AnchorState;
+import com.java3y.austin.common.enums.EnumUtil;
 import com.java3y.austin.support.mq.SendMqService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class LogUtils extends CustomLogListener {
      */
     @Override
     public void createLog(LogDTO logDTO) throws Exception {
-        log.info(JSON.toJSONString(logDTO));
+        log.info("LogDTO: " + JSON.toJSONString(logDTO));
     }
 
     /**
@@ -40,7 +42,7 @@ public class LogUtils extends CustomLogListener {
      */
     public void print(LogParam logParam) {
         logParam.setTimestamp(System.currentTimeMillis());
-        log.info(JSON.toJSONString(logParam));
+        log.info("LogParam: " + JSON.toJSONString(logParam));
     }
 
     /**
@@ -49,7 +51,9 @@ public class LogUtils extends CustomLogListener {
     public void print(AnchorInfo anchorInfo) {
         anchorInfo.setLogTimestamp(System.currentTimeMillis());
         String message = JSON.toJSONString(anchorInfo);
-        log.info(message);
+
+        String stateDescription = EnumUtil.getDescriptionByCode(anchorInfo.getState(), AnchorState.class);
+        log.info("{}, AnchorInfo:{}", stateDescription, message);
 
         try {
             sendMqService.send(topicName, message);
