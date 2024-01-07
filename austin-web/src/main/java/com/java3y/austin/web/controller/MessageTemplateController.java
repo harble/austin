@@ -137,6 +137,14 @@ public class MessageTemplateController {
     @PostMapping("test")
     @ApiOperation("/测试发送接口")
     public SendResponse test(@RequestBody MessageTemplateParam messageTemplateParam) {
+        return _send(messageTemplateParam);
+    }
+    @PostMapping("send")
+    @ApiOperation("/发送接口")
+    public SendResponse send(@RequestBody MessageTemplateParam messageTemplateParam) {
+        return _send(messageTemplateParam);
+    }
+    public SendResponse _send(MessageTemplateParam messageTemplateParam) {
 
         Map<String, String> variables = JSON.parseObject(messageTemplateParam.getMsgContent(), Map.class);
         MessageParam messageParam = MessageParam.builder().receiver(messageTemplateParam.getReceiver()).variables(variables).build();
