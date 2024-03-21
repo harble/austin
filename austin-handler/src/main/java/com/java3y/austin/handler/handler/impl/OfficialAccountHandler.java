@@ -3,6 +3,7 @@ package com.java3y.austin.handler.handler.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
+import com.java3y.austin.common.constant.CommonConstant;
 import com.java3y.austin.common.domain.AnchorInfo;
 import com.java3y.austin.common.domain.RecallTaskInfo;
 import com.java3y.austin.common.domain.TaskInfo;
@@ -65,11 +66,20 @@ public class OfficialAccountHandler extends BaseHandler implements Handler {
      * 组装发送模板信息参数
      */
     private WxMpTemplateMessage assembleReq(Set<String> receiver, OfficialAccountsContentModel contentModel) {
+        Map<String, String> data = contentModel.getOfficialAccountParam();
+        String url = contentModel.getUrl();
+        // 20240321 把传过来的first参数用作url的参数
+        if ( data!=null && data.containsKey("first") ) {
+            String begin = "&";
+            if (url.indexOf("?") == -1) begin = "?";
+            url = url + begin + data.get("first");
+            // log.info("assembleReq has first={}", url);
+        }
         return WxMpTemplateMessage.builder()
                 .toUser(CollUtil.getFirst(receiver.iterator()))
                 .templateId(contentModel.getTemplateId())
-                .url(contentModel.getUrl())
-                .data(getWxMpTemplateData(contentModel.getOfficialAccountParam()))
+                .url(url)
+                .data(getWxMpTemplateData(data))
                 .miniProgram(new WxMpTemplateMessage.MiniProgram(contentModel.getMiniProgramId(), contentModel.getPath(), false))
                 .build();
     }
