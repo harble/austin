@@ -1,0 +1,1 @@
+java -jar -Xmx512m -Xms512m -Xmn192m -Xss256k target\austin-web-0.0.1-SNAPSHOT.jar --server.port=8080 --spring.profiles.active=dev --DproxySet=true --DproxyHost=127.0.0.1 --DproxyPort=8888
